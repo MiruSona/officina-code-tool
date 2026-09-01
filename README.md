@@ -1,7 +1,7 @@
 # CodeTool
 
 게임 프로젝트에 넣어 줄 **코드 구조 템플릿 · 코딩 컨벤션 · 저장소(코드 검색) 붙이기**를 다루는 툴이다.
-기본 구조는 4층(Master / Manager·Hub / Object / Agent·Handler)이다.
+기본 구조는 4층(Master / Manager·Hub / Object / Agent·Util)이다.
 
 **상태 : 조사 끝 · 1차 설계 있음 · 대기**
 
