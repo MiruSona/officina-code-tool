@@ -1,0 +1,24 @@
+# CodeTool — 지금은 문서뿐이라 무시할 것이 적다.
+# 나중에 C# 뼈대 코드가 들어오면 Unity·.NET 부스러기를 여기에 더한다.
+
+# OS·편집기 부스러기
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# 로그·임시
+*.log
+.utmp/
+out/
+
+# 로컬 전용 문서 (저장소에 올리지 않는다)
+*.local.md
+
+# .NET / Unity 부스러기 (코드가 생기면 쓰인다)
+bin/
+obj/
+Library/
+Temp/
+Logs/
+Build/

@@ -5,4 +5,6 @@
 - `.meta` 파일은 **대상 파일과 항상 함께** 커밋한다
 - `Library/` `Temp/` `Logs/` `Build/` 는 커밋하지 않는다
 - 씬(`.unity`)·프리팹(`.prefab`)은 **같은 파일을 동시에 고치지 않는다** (합치기가 지옥이다)
-- 근거 : `CodeTool/Docs/Research/2026-08-20-Unity프로젝트구조조사.md`
+- 근거 : Unity 프로젝트 구조 조사 문서
+  — 스튜디오에서는 `CodeTool/Docs/Research/2026-08-20-Unity프로젝트구조조사.md`,
+  CodeTool 저장소 단독에서는 `Docs/Research/2026-08-20-Unity프로젝트구조조사.md`

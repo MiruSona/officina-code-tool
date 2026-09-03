@@ -5,8 +5,14 @@ description: Use before writing or editing any code in this repo — C#/Unity, G
 
 # 코드 쓰기 규칙
 
-**원문은 `CodeTool/Docs/Guide/코딩컨벤션.md`.** 이 스킬은 체크리스트다.
-원문이 없는 저장소면 아래 목록만 따른다.
+**원문은 코딩컨벤션 문서다.** 이 스킬은 체크리스트다. 원문이 없는 저장소면 아래 목록만 따른다.
+
+| 어디서 쓰나 | 원문 경로 |
+| --- | --- |
+| 스튜디오(서브모듈로 물린 상태) | `CodeTool/Docs/Guide/코딩컨벤션.md` |
+| CodeTool 저장소 단독 | `Docs/Guide/코딩컨벤션.md` |
+
+로컬 LLM 에게 줄 짧은 요약본은 같은 폴더의 `코딩컨벤션-요약.md` 다.
 
 ## 코드 쓰기 전 체크리스트
 
