@@ -38,7 +38,8 @@ namespace Officina.Core
 
         private void FixedUpdate()
         {
-            float dt = Time.fixedDeltaTime * GameMaster.TimeScale;
+            // FixedProcess 는 물리와 같은 시간을 쓴다. TimeScale 은 Process·LateProcess 에만 건다.
+            float dt = Time.fixedDeltaTime;
             _services.FixedProcessAll(dt);
             _masters.FixedProcessAll(dt);
         }

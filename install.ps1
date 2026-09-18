@@ -117,7 +117,10 @@ $unityVersion = (Get-Content -LiteralPath $versionFile -TotalCount 1)
 # git 미커밋 변경은 막지 않고 경고만 한다 (설계 4-5).
 # 오류를 삼키는 자리 ① — git 이 없거나 저장소가 아니면 경고를 건너뛴다.
 $dirtyCount = 0
+$savedPreference = $ErrorActionPreference
 try {
+    # PS 5.1 은 네이티브 명령의 stderr 를 오류로 본다. Stop 이면 git 이 경고만 찍어도 여기가 통째로 날아간다.
+    $ErrorActionPreference = 'Continue'
     $gitLines = & git -C $projectRoot status --porcelain 2>$null
     if ($LASTEXITCODE -eq 0) {
         foreach ($line in $gitLines) {
@@ -127,6 +130,9 @@ try {
 }
 catch {
     $dirtyCount = 0
+}
+finally {
+    $ErrorActionPreference = $savedPreference
 }
 
 # ---------------------------------------------------------------- 3) 원본 훑기
@@ -138,19 +144,30 @@ if (-not (Test-Path -LiteralPath $templateRoot -PathType Container)) {
 
 $srcRoot = (Resolve-Path -LiteralPath $templateRoot).ProviderPath.TrimEnd('\')
 
+# PS 5.1 의 -Recurse 는 정션 폴더를 따라 들어가 Template 밖 내용을 긁어 온다. 직접 내려간다.
 $sourceFiles = @()
 $skippedLinks = 0
-foreach ($found in (Get-ChildItem -LiteralPath $srcRoot -Recurse -Force -File)) {
-    if (Test-ReparsePoint $found) {
-        $skippedLinks++
-        continue
-    }
-    if (-not (Test-UnderRoot $found.FullName $srcRoot)) {
-        $skippedLinks++
-        continue
-    }
+$pending = New-Object System.Collections.Stack
+$pending.Push($srcRoot) | Out-Null
+while ($pending.Count -gt 0) {
+    $dir = $pending.Pop()
+    foreach ($found in (Get-ChildItem -LiteralPath $dir -Force)) {
+        if (Test-ReparsePoint $found) {
+            $skippedLinks++
+            continue
+        }
+        if (-not (Test-UnderRoot $found.FullName $srcRoot)) {
+            $skippedLinks++
+            continue
+        }
 
-    $sourceFiles += $found
+        if ($found.PSIsContainer) {
+            $pending.Push($found.FullName) | Out-Null
+            continue
+        }
+
+        $sourceFiles += $found
+    }
 }
 
 if ($sourceFiles.Count -eq 0) {
@@ -160,6 +177,7 @@ if ($sourceFiles.Count -eq 0) {
 # ---------------------------------------------------------------- 4) 목적지 계산 + 경로 감옥 + 5) 계획표
 
 $plan = @()
+$checkedDirs = @{}
 foreach ($source in $sourceFiles) {
     $rel = $source.FullName.Substring($srcRoot.Length).TrimStart('\', '/')
 
@@ -189,14 +207,31 @@ foreach ($source in $sourceFiles) {
         $probe = Split-Path -Parent $probe
     }
 
-    $probeItem = Get-Item -LiteralPath $probe -Force
-    if (Test-ReparsePoint $probeItem) {
-        Write-Fail "목적지 중간 폴더가 링크·정션이다 : $probe" 3
-    }
-
     $probeFull = (Resolve-Path -LiteralPath $probe).ProviderPath.TrimEnd('\')
     if (-not (Test-UnderRoot $probeFull $dest)) {
         Write-Fail "목적지가 Assets 밖으로 나간다 : $target" 3
+    }
+
+    # 가장 가까운 조상 하나만 봐서는 중간 정션을 놓친다. $dest 까지 모든 조상을 본다.
+    $walk = $probeFull
+    while ($true) {
+        if (-not $checkedDirs.ContainsKey($walk.ToLowerInvariant())) {
+            $walkItem = Get-Item -LiteralPath $walk -Force
+            if (Test-ReparsePoint $walkItem) {
+                Write-Fail "목적지 조상 폴더가 링크·정션이다 : $walk" 3
+            }
+
+            $checkedDirs[$walk.ToLowerInvariant()] = $true
+        }
+
+        if ($walk.Equals($dest, [System.StringComparison]::OrdinalIgnoreCase)) { break }
+
+        $up = Split-Path -Parent $walk
+        if ([string]::IsNullOrEmpty($up) -or $up.TrimEnd('\').Equals($walk, [System.StringComparison]::OrdinalIgnoreCase)) {
+            Write-Fail "목적지 조상을 거슬러 올라가다 Assets 를 못 만났다 : $probeFull" 3
+        }
+
+        $walk = $up.TrimEnd('\')
     }
 
     if (Test-Path -LiteralPath $target -PathType Container) {

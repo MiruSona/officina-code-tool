@@ -43,6 +43,9 @@ namespace Officina.Core
             // 표시가 먼저다. 이번 순회의 남은 항목부터 건너뛴다.
             _dead.Add(item);
 
+            // 아직 합류 안 한 추가 예약도 함께 지운다. 안 지우면 다음 Flush 가 되살린다.
+            _pendingAdd.Remove(item);
+
             if (_depth > 0)
             {
                 _pendingRemove.Add(item);
@@ -68,9 +71,8 @@ namespace Officina.Core
             finally
             {
                 _depth--;
+                Flush();
             }
-
-            Flush();
         }
 
         public void FixedProcessAll(float deltaTime)
@@ -89,9 +91,8 @@ namespace Officina.Core
             finally
             {
                 _depth--;
+                Flush();
             }
-
-            Flush();
         }
 
         public void LateProcessAll(float deltaTime)
@@ -110,9 +111,8 @@ namespace Officina.Core
             finally
             {
                 _depth--;
+                Flush();
             }
-
-            Flush();
         }
 
         private void AddNow(T item)

@@ -17,6 +17,7 @@ namespace Officina.Core
         private static GameRunner _runner;
         private static string _pendingScene;
 
+        // Process·LateProcess 의 dt 에만 걸린다. FixedProcess 는 물리와 맞춰 그대로 둔다.
         public static float TimeScale { get; set; } = 1f;
 
         internal static GameRunner Runner
