@@ -1,5 +1,7 @@
 # ProjectMozzi 설치 피드백 (2026-09-18)
 
+> 반영 (2026-09-21) : 인스펙터 전제 정정 · `install.ps1` 의 `m_EditorVersion:` 떼기 · 끝 안내 1·3번(Unity CLI 확인 · `.meta` 와 함께 지우기) · 주석 2줄 예외 대신 「긴 것은 설계 문서에 두고 주석에는 경로만」 · README 상태 줄. **남은 것** : `Default.globalconfig` 진단 IDE 확인 · `PrefabKeysValidator` 메뉴 눌러 보기.
+
 `install.ps1 -Namespace Mozzi` 를 ProjectMozzi2 의 `ProjectMozziUnity/Assets` 에 처음 돌린 기록이다.
 Unity 6000.3.23f1 · 2D URP · Pipeline 패키지(`unity command`)로 컴파일·씬·플레이를 봤다.
 

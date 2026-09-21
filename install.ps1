@@ -112,7 +112,7 @@ if (-not (Test-Path -LiteralPath $versionFile -PathType Leaf)) {
     Write-Fail "ProjectSettings\ProjectVersion.txt 가 없다 (Unity 프로젝트가 아니다) : $projectRoot" 2
 }
 
-$unityVersion = (Get-Content -LiteralPath $versionFile -TotalCount 1)
+$unityVersion = (Get-Content -LiteralPath $versionFile -TotalCount 1) -replace '^m_EditorVersion:\s*', ''
 
 # git 미커밋 변경은 막지 않고 경고만 한다 (설계 4-5).
 # 오류를 삼키는 자리 ① — git 이 없거나 저장소가 아니면 경고를 건너뛴다.
@@ -397,8 +397,12 @@ foreach ($item in $written) {
 Write-Host "만듦 $doneCreate · 덮음 $doneOver · 건너뜀 $plannedSkip · 치환 $replaceCount 곳 · 잔여 토큰 0"
 Write-Host ''
 Write-Host '사용자가 할 일'
+# 이 스크립트는 게임 저장소 자리에서 도는 일이 많다. 상대 경로로 찍으면 거기엔 없는 길이 된다.
+$unityCliDoc = Join-Path $PSScriptRoot 'Docs\Guide\UnityCLI함정.md'
 Write-Host '  1. Unity 를 열어 컴파일 오류 0 을 본다'
+Write-Host "     (에디터가 열려 있고 Unity CLI 가 있으면 recompile 과 콘솔 오류 보기로 확인한다 — $unityCliDoc)"
 Write-Host '  2. .meta 가 새로 생긴 것을 커밋한다'
-Write-Host '  3. Sample 폴더를 지우고 자기 Master 를 만든다'
+Write-Host '  3. Sample 폴더를 .meta 와 함께 지우고 자기 Master 를 만든다'
+Write-Host '     (Unity 의 Project 창에서 지우거나 Unity CLI 의 자산 지우기 명령으로)'
 
 exit 0

@@ -1,5 +1,7 @@
 # ProjectMozzi 사용 피드백 (2026-09-20)
 
+> 반영 (2026-09-21) : `csharp-unity.md` 에 TMP 줄과 Editor 네임스페이스(`<루트>.EditorTools`) 줄 · README 에 TMP 한 줄. **남은 것** : 템플릿 asmdef 의 TMP 참조 (Unity 6 어셈블리 이름 실측 필요).
+
 게임 저장소 ProjectMozzi2 에서 코딩 컨벤션과 템플릿을 쓴 기록이다.
 이날 UI 글씨를 legacy `Text` 에서 TMP 로 바꿨다 (UI 코드 13개 · View 2개 · Text 365곳).
 
