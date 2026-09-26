@@ -53,6 +53,7 @@ Officina 툴킷의 한 조각이며, 이 저장소만 따로 받아도 그대로
 - 설계와 검증 항목은 `Docs/Design/2026-09-18-복사템플릿설계.md` 를 본다.
 - `Sample/` 은 `.meta` 와 함께 지운다.
 - UI 글씨는 TMP 로 시작한다 — 까닭은 스킬의 `csharp-unity.md`.
+- asmdef 가 TMP·UI 를 참조한다. 이름 참조라 2022 LTS·Unity 6 둘 다 그대로 된다.
 - Unity CLI 로 확인할 때 덴 자리는 `Docs/Guide/UnityCLI함정.md`.
 
 ## 라이선스
