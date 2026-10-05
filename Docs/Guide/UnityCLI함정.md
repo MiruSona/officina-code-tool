@@ -2,7 +2,7 @@
 
 > Unity CLI(`unity command …`)는 **Unity 공식 도구(베타)라 우리가 못 고친다.** 여기는 우리가 덴 자리 모음이다.
 > 명령 이름은 판마다 바뀔 수 있으니 `unity command` 목록으로 확인한다.
-> 출처 : `Docs/Todo/2026-09-20-UnityCLI사용피드백.md` · `Docs/Todo/2026-09-18-ProjectMozzi설치피드백.md` ·
+> 출처 : `Docs/Todo/2026-09-20-UnityCLI사용피드백.md` · `Docs/Todo/2026-09-18-게임저장소설치피드백.md` ·
 > `Docs/Todo/2026-10-03-반복03버그수정피드백.md` · `Docs/Todo/2026-10-03-화면맞춤세이브작업피드백.md` ·
 > `Docs/Todo/2026-10-03-정식화면연출작업피드백.md` · `Docs/Todo/2026-10-05-화풍통일코드갈래피드백.md`
 > 마지막 고침 : 2026-10-05
