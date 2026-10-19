@@ -70,7 +70,7 @@ namespace Officina.Resource
             {
                 // 뼈대 전체에서 Instantiate 를 부르는 유일한 자리다.
                 // 새로 만들 때도 부모를 함께 준다. 안 그러면 Awake·OnEnable 이 부모 없이 돌아 풀 대여와 순서가 달라진다.
-                go = UnityEngine.Object.Instantiate(_source.Load(key), parent, true);
+                go = UnityEngine.Object.Instantiate(_source.Load(key), parent, false);
             }
 
             // 빌려줄 수 있는지 먼저 본다. 못 빌려주면 꺼낸 것을 되돌려 반쯤 빌려준 상태를 남기지 않는다.
@@ -89,7 +89,7 @@ namespace Officina.Resource
                 throw new InvalidOperationException(key + " 프리팹에 " + typeof(T).Name + " 이 없다");
             }
 
-            go.transform.SetParent(parent);
+            go.transform.SetParent(parent, false);
             go.SetActive(true);
             _keyOf[go] = key;
 
@@ -125,7 +125,7 @@ namespace Officina.Resource
             }
 
             go.SetActive(false);
-            go.transform.SetParent(_poolRoot);
+            go.transform.SetParent(_poolRoot, false);
 
             Stack<GameObject> pool;
             if (_pools.TryGetValue(key, out pool) == false)

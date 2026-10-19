@@ -65,6 +65,18 @@ namespace Officina.Core
             TimeScale = 1f;
             _pendingScene = null;
             _runner = null;
+            // 지난 Play 의 Service 를 거두지 않으면 sceneUnloaded 같은 static 구독이 Play 마다 쌓인다.
+            for (int i = _services.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _services[i].Dispose();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
             _services.Clear();
             GlobalHub.Clear();
             EventBus.Clear();

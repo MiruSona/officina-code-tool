@@ -238,6 +238,18 @@ foreach ($source in $sourceFiles) {
         Write-Fail "목적지가 이미 폴더다 : $target" 3
     }
 
+    # 다른 -Namespace 로 다시 돌리면 옛 asmdef 옆에 새 것이 생겨 Unity 가 한 폴더 두 asmdef 오류를 낸다.
+    if ($leaf -like '*.asmdef') {
+        $targetDir = Split-Path -Parent $target
+        if (Test-Path -LiteralPath $targetDir -PathType Container) {
+            foreach ($other in (Get-ChildItem -LiteralPath $targetDir -Filter '*.asmdef' -File -Force)) {
+                if (-not $other.Name.Equals($leaf, [System.StringComparison]::OrdinalIgnoreCase)) {
+                    Write-Fail "목적지 폴더에 이름이 다른 asmdef 가 이미 있다 (다른 네임스페이스로 깐 적이 있나) : $($other.FullName)" 3
+                }
+            }
+        }
+    }
+
     $action = '만듦'
     if (Test-Path -LiteralPath $target -PathType Leaf) {
         $action = '건너뜀'
@@ -326,7 +338,8 @@ foreach ($item in $plan) {
             New-Item -ItemType Directory -Path $parent | Out-Null
         }
 
-        $tmp = "$($item.Target).tmp-$PID"
+        # tmp 는 Assets 밖(같은 볼륨의 프로젝트 루트)에 둔다. 중간에 끊기면 Unity 가 남은 tmp 를 임포트한다.
+        $tmp = Join-Path $projectRoot "$(Split-Path -Leaf $item.Target).tmp-$PID"
         [System.IO.File]::WriteAllText($tmp, $text, $utf8NoBom)
         try {
             Move-Item -LiteralPath $tmp -Destination $item.Target -Force
